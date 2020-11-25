@@ -1,26 +1,57 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import contacts from './contacts.json';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = {
+    myContacts: contacts.slice(0, 5)
+  }
+
+addRandomContact = () => {
+  let randomContactIndex = Math.floor(Math.random() * contacts.length) 
+  let randomContact = contacts[randomContactIndex]  
+  let contactsCopy = this.state.myContacts.concat(randomContact)
+
+  this.setState({
+    myContacts: contactsCopy
+  })
+
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <table>
+        <thead>
+          <tr>
+            <th>
+              Picture
+            </th>
+            <th>
+              Name
+            </th>
+            <th>
+              Popularity
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+              {this.state.myContacts.map(contact => {
+                return (
+                  <tr key={contact.id}>
+                      <td> <img src={contact.pictureUrl} alt={contact.name} /> </td>
+                      <td> {contact.name} </td>
+                      <td> {contact.popularity} </td>
+                  </tr>
+                  )
+              })}
+        </tbody>
+        </table>
+        <button onClick={this.addRandomContact} > Add Random Contact</button>
+      </div>
+    );
+  }
 }
 
 export default App;
