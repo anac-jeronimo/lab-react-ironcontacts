@@ -19,9 +19,43 @@ addRandomContact = () => {
 
   }
 
+sortByName = () => {
+  let contactsCopy = [...this.state.myContacts]
+  contactsCopy.sort(function(a, b){return a.name.localeCompare(b.name)}); 
+ 
+  this.setState({
+    myContacts: contactsCopy
+  })
+}
+
+sortByPopularity = () => {
+  let contactsCopy = [...this.state.myContacts]
+  contactsCopy.sort(function(a,b) {return b.popularity - a.popularity});
+
+  this.setState ({
+    myContacts: contactsCopy
+  })
+}
+
+deleteMovieHandler = (id) => {
+  let contactsCopy = [...this.state.myContacts]
+  const contactToRemove = contactsCopy.findIndex((item) => {
+    return item.id === id;
+  });
+  contactsCopy.splice(contactToRemove, 1);
+
+  this.setState({
+    myContacts: contactsCopy
+  });
+}
+
+
   render() {
     return (
       <div className="App">
+      <button onClick={this.addRandomContact} > Add Random Contact</button>
+      <button onClick={this.sortByName} >Sort by name</button>
+      <button onClick={this.sortByPopularity}>Sort by popularity</button>
         <table>
         <thead>
           <tr>
@@ -34,6 +68,9 @@ addRandomContact = () => {
             <th>
               Popularity
             </th>
+            <th>
+              Action
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -43,12 +80,14 @@ addRandomContact = () => {
                       <td> <img src={contact.pictureUrl} alt={contact.name} /> </td>
                       <td> {contact.name} </td>
                       <td> {contact.popularity} </td>
+                      <td> <button onClick={() => this.deleteMovieHandler(contact.id)} > Delete</button> </td>
                   </tr>
                   )
               })}
         </tbody>
         </table>
-        <button onClick={this.addRandomContact} > Add Random Contact</button>
+        
+
       </div>
     );
   }
